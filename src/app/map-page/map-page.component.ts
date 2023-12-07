@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-import * as MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import services from '../../assets/data/services.json';
 
 @Component({
   selector: 'app-map-page',
@@ -14,15 +14,49 @@ export class MapPageComponent implements OnInit {
     const map = new mapboxgl.Map({
       container: 'map-container', // container ID
       style: 'mapbox://styles/mapbox/navigation-night-v1', // style URL
-      center: [15.9, 45.8], // starting position [lng, lat]
-      zoom: 13, // starting zoom
+      center: [15.95, 45.8], // starting position [lng, lat]
+      zoom: 12, // starting zoom
     });
 
     map.addControl(
-      new MapboxDirections({
-        accessToken: mapboxgl.accessToken,
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        // When active the map will receive updates to the device's location as it changes.
+        trackUserLocation: true,
+        // Draw an arrow next to the location dot to indicate which direction the device is heading.
+        showUserHeading: true,
       }),
-      'top-left',
     );
+
+    map.on('style.load', () => {
+      map.addSource('urban-areas', {
+        type: 'geojson',
+        data: 'https://docs.mapbox.com/mapbox-gl-js/assets/ne_50m_urban_areas.geojson',
+      });
+
+      map.addLayer({
+        id: 'urban-areas-fill',
+        type: 'fill',
+        // This property allows you to identify which `slot` in
+        // the Mapbox Standard your new layer should be placed in (`bottom`, `middle`, `top`).
+        source: 'urban-areas',
+        layout: {},
+        paint: {
+          'fill-color': '#f08',
+          'fill-opacity': 0.1,
+        },
+      });
+    });
+
+    for (var i = 0; i < services.length; i++) {
+      var marker1 = new mapboxgl.Marker()
+        .setLngLat([
+          services[i].AKT_POS.AKT_POS_LAENGE,
+          services[i].AKT_POS.AKT_POS_BREITE,
+        ])
+        .addTo(map);
+    }
   }
 }
