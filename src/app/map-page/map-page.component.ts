@@ -36,22 +36,25 @@ export class MapPageComponent implements OnInit {
         data: 'https://docs.mapbox.com/mapbox-gl-js/assets/ne_50m_urban_areas.geojson',
       });
 
-      map.addLayer({
-        id: 'urban-areas-fill',
-        type: 'fill',
-        // This property allows you to identify which `slot` in
-        // the Mapbox Standard your new layer should be placed in (`bottom`, `middle`, `top`).
-        source: 'urban-areas',
-        layout: {},
-        paint: {
-          'fill-color': '#f08',
-          'fill-opacity': 0.1,
-        },
-      });
+      // map.addLayer({
+      //   id: 'urban-areas-fill',
+      //   type: 'fill',
+      //   // This property allows you to identify which `slot` in
+      //   // the Mapbox Standard your new layer should be placed in (`bottom`, `middle`, `top`).
+      //   source: 'urban-areas',
+      //   layout: {},
+      //   paint: {
+      //     'fill-color': '#f08',
+      //     'fill-opacity': 0.1,
+      //   },
+      // });
     });
 
+    var vehicleIcon = document.createElement('div');
+    vehicleIcon.classList.add("vehicle");
+
     for (var i = 0; i < services.length; i++) {
-      var marker1 = new mapboxgl.Marker()
+      var marker1 = new mapboxgl.Marker(vehicleIcon)
         .setLngLat([
           services[i].AKT_POS.AKT_POS_LAENGE,
           services[i].AKT_POS.AKT_POS_BREITE,
