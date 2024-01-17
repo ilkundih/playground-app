@@ -5,8 +5,6 @@ import services from '../../assets/data/services.json';
 import addClassName from 'mapbox-gl'
 import { ElementSchemaRegistry } from '@angular/compiler';
 
-
-
 @Component({
   selector: 'app-map-page',
   templateUrl: './map-page.component.html',
@@ -14,8 +12,6 @@ import { ElementSchemaRegistry } from '@angular/compiler';
 })
 export class MapPageComponent implements OnInit {
   ngOnInit(): void {
-
-
 
     (mapboxgl as typeof mapboxgl).accessToken =
       'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ';
@@ -29,10 +25,13 @@ export class MapPageComponent implements OnInit {
     const directions = new MapboxDirections({
       accessToken: 'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ',
       unit: 'metric',
-      profile: 'mapbox/driving'
+      profile: 'mapbox/driving',
+      bearing: true,
+      steps: true,
+      // controls: {
+      //   instructions: true
+      // }
     })
-
-
 
     map.on('style.load', () => {
       map.addSource('urban-areas', {
@@ -55,32 +54,26 @@ export class MapPageComponent implements OnInit {
     });
 
     map.addControl(directions, 'top-right');
+
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true,
       },
+      fitBoundsOptions: {
+        maxZoom: 18
+      },
       // When active the map will receive updates to the device's location as it changes.
       trackUserLocation: true,
+      showAccuracyCircle: true,
       // Draw an arrow next to the location dot to indicate which direction the device is heading.
       showUserHeading: true,
 
     });
 
-
     map.addControl(geolocate);
     map.on('load', function () {
       geolocate.trigger();
     })
-
-    geolocate.on('geolocate', function (e) {
-      map.flyTo({
-        zoom: 15,
-        center: [e.coorde.longitude, e.coorde.latitude]
-      })
-    })
-    //map.on('load', )
-
-
 
     // for (var i = 0; i < services.length; i++) {
     //   const el = document.createElement('div');
@@ -92,9 +85,7 @@ export class MapPageComponent implements OnInit {
     //       services[i].AKT_POS.AKT_POS_BREITE,
     //     ])
     //     .addTo(map);
-
     //   console.log(el);
-
     // }
   }
 }
