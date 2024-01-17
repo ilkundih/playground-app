@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
+import * as MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import services from '../../assets/data/services.json';
+import addClassName from 'mapbox-gl'
+import { ElementSchemaRegistry } from '@angular/compiler';
+
+
 
 @Component({
   selector: 'app-map-page',
@@ -9,6 +14,9 @@ import services from '../../assets/data/services.json';
 })
 export class MapPageComponent implements OnInit {
   ngOnInit(): void {
+
+
+
     (mapboxgl as typeof mapboxgl).accessToken =
       'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ';
     const map = new mapboxgl.Map({
@@ -18,17 +26,13 @@ export class MapPageComponent implements OnInit {
       zoom: 12, // starting zoom
     });
 
-    map.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        // When active the map will receive updates to the device's location as it changes.
-        trackUserLocation: true,
-        // Draw an arrow next to the location dot to indicate which direction the device is heading.
-        showUserHeading: true,
-      }),
-    );
+    const directions = new MapboxDirections({
+      accessToken: 'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ',
+      unit: 'metric',
+      profile: 'mapbox/driving'
+    })
+
+
 
     map.on('style.load', () => {
       map.addSource('urban-areas', {
@@ -36,30 +40,61 @@ export class MapPageComponent implements OnInit {
         data: 'https://docs.mapbox.com/mapbox-gl-js/assets/ne_50m_urban_areas.geojson',
       });
 
-      // map.addLayer({
-      //   id: 'urban-areas-fill',
-      //   type: 'fill',
-      //   // This property allows you to identify which `slot` in
-      //   // the Mapbox Standard your new layer should be placed in (`bottom`, `middle`, `top`).
-      //   source: 'urban-areas',
-      //   layout: {},
-      //   paint: {
-      //     'fill-color': '#f08',
-      //     'fill-opacity': 0.1,
-      //   },
-      // });
+      map.addLayer({
+        id: 'urban-areas-fill',
+        type: 'fill',
+        // This property allows you to identify which `slot` in
+        // the Mapbox Standard your new layer should be placed in (`bottom`, `middle`, `top`).
+        source: 'urban-areas',
+        layout: {},
+        paint: {
+          'fill-color': '#f08',
+          'fill-opacity': 0.05,
+        },
+      });
     });
 
-    var vehicleIcon = document.createElement('div');
-    vehicleIcon.classList.add("vehicle");
+    map.addControl(directions, 'top-right');
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      // When active the map will receive updates to the device's location as it changes.
+      trackUserLocation: true,
+      // Draw an arrow next to the location dot to indicate which direction the device is heading.
+      showUserHeading: true,
 
-    for (var i = 0; i < services.length; i++) {
-      var marker1 = new mapboxgl.Marker(vehicleIcon)
-        .setLngLat([
-          services[i].AKT_POS.AKT_POS_LAENGE,
-          services[i].AKT_POS.AKT_POS_BREITE,
-        ])
-        .addTo(map);
-    }
+    });
+
+
+    map.addControl(geolocate);
+    map.on('load', function () {
+      geolocate.trigger();
+    })
+
+    geolocate.on('geolocate', function (e) {
+      map.flyTo({
+        zoom: 15,
+        center: [e.coorde.longitude, e.coorde.latitude]
+      })
+    })
+    //map.on('load', )
+
+
+
+    // for (var i = 0; i < services.length; i++) {
+    //   const el = document.createElement('div');
+    //   el.className = 'vehicleIcon';
+
+    //   const marker = new mapboxgl.Marker(el)
+    //     .setLngLat([
+    //       services[i].AKT_POS.AKT_POS_LAENGE,
+    //       services[i].AKT_POS.AKT_POS_BREITE,
+    //     ])
+    //     .addTo(map);
+
+    //   console.log(el);
+
+    // }
   }
 }

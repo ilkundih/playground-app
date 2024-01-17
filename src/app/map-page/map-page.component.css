@@ -5,10 +5,10 @@
   width: 100%;
 }
 
-.vehicle {
-  height: 69px;
-  width: 47px;
-  background-image: '../assets/images/bus.svg';
-  background-size: contain;
-  cursor: pointer;
+
+.vehicleIcon {
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-image: '/src/assets/images/circle-letter-b.png';
 }
