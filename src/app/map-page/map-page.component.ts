@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import * as MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import { Observable, timer } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import services from '../../assets/data/services.json';
@@ -37,9 +38,8 @@ export class MapPageComponent implements OnInit {
       accessToken: 'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ',
       unit: 'metric',
       profile: 'mapbox/driving',
-      bearing: true,
-      steps: true,
-      notifications: 'all'
+      //bearing: true,
+      //steps: true,
       // controls: {
       //   instructions: true
       // }
@@ -75,9 +75,17 @@ export class MapPageComponent implements OnInit {
       trackUserLocation: true,
       showAccuracyCircle: true,
       showUserHeading: true,
+      showUserLocation: true
     });
 
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl
+    })
+
+    maps.addControl(geocoder);
     maps.addControl(geolocate);
+
     maps.on('load', function () {
       geolocate.trigger();
     })
@@ -90,9 +98,10 @@ export class MapPageComponent implements OnInit {
     //     ])
     //     .addTo(map);
     // }
+    console.log(geolocate.getDefaultPosition);
 
     if (geolocate.getDefaultPosition == directions.waypoints[0].location) {
-
+      this.startTimer;
     }
   }
 
