@@ -12,3 +12,23 @@
   height: 10px;
   background-image: '/src/assets/images/circle-letter-b.png';
 }
+
+#lap-timer {
+  text-align: center;
+  margin: 10px auto;
+  width: auto;
+  height: auto;
+  position: relative;
+  display: flex;
+  z-index: 99999;
+}
+
+button {
+  text-align: center;
+  margin: 10px auto;
+  width: auto;
+  height: auto;
+  position: relative;
+  display: flex;
+  z-index: 99999;
+}

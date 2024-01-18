@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import * as MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
+import { Observable, timer } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 import services from '../../assets/data/services.json';
-import addClassName from 'mapbox-gl'
-import { ElementSchemaRegistry } from '@angular/compiler';
 
 @Component({
   selector: 'app-map-page',
@@ -11,15 +11,26 @@ import { ElementSchemaRegistry } from '@angular/compiler';
   styleUrls: ['./map-page.component.css'],
 })
 export class MapPageComponent implements OnInit {
-  ngOnInit(): void {
 
+  clock: any;
+  minutes: any = '00';
+  seconds: any = '00';
+  milliseconds: any = '00';
+
+  laps: any = [];
+  counter: number;
+  timerRef;
+  running: boolean = false;
+  startText = 'Start';
+
+  ngOnInit(): void {
     (mapboxgl as typeof mapboxgl).accessToken =
       'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ';
-    const map = new mapboxgl.Map({
-      container: 'map-container', // container ID
-      style: 'mapbox://styles/mapbox/navigation-night-v1', // style URL
-      center: [15.95, 45.8], // starting position [lng, lat]
-      zoom: 12, // starting zoom
+    const maps = new mapboxgl.Map({
+      container: 'map-container',
+      style: 'mapbox://styles/mapbox/navigation-night-v1',
+      center: [15.95, 45.8],
+      zoom: 12,
     });
 
     const directions = new MapboxDirections({
@@ -28,22 +39,21 @@ export class MapPageComponent implements OnInit {
       profile: 'mapbox/driving',
       bearing: true,
       steps: true,
+      notifications: 'all'
       // controls: {
       //   instructions: true
       // }
     })
 
-    map.on('style.load', () => {
-      map.addSource('urban-areas', {
+    maps.on('style.load', () => {
+      maps.addSource('urban-areas', {
         type: 'geojson',
         data: 'https://docs.mapbox.com/mapbox-gl-js/assets/ne_50m_urban_areas.geojson',
       });
 
-      map.addLayer({
+      maps.addLayer({
         id: 'urban-areas-fill',
         type: 'fill',
-        // This property allows you to identify which `slot` in
-        // the Mapbox Standard your new layer should be placed in (`bottom`, `middle`, `top`).
         source: 'urban-areas',
         layout: {},
         paint: {
@@ -53,7 +63,7 @@ export class MapPageComponent implements OnInit {
       });
     });
 
-    map.addControl(directions, 'top-right');
+    maps.addControl(directions, 'top-right');
 
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
@@ -62,30 +72,87 @@ export class MapPageComponent implements OnInit {
       fitBoundsOptions: {
         maxZoom: 18
       },
-      // When active the map will receive updates to the device's location as it changes.
       trackUserLocation: true,
       showAccuracyCircle: true,
-      // Draw an arrow next to the location dot to indicate which direction the device is heading.
       showUserHeading: true,
-
     });
 
-    map.addControl(geolocate);
-    map.on('load', function () {
+    maps.addControl(geolocate);
+    maps.on('load', function () {
       geolocate.trigger();
     })
 
     // for (var i = 0; i < services.length; i++) {
-    //   const el = document.createElement('div');
-    //   el.className = 'vehicleIcon';
-
-    //   const marker = new mapboxgl.Marker(el)
+    //   const marker = new mapboxgl.Marker()
     //     .setLngLat([
     //       services[i].AKT_POS.AKT_POS_LAENGE,
     //       services[i].AKT_POS.AKT_POS_BREITE,
     //     ])
     //     .addTo(map);
-    //   console.log(el);
     // }
+
+    if (geolocate.getDefaultPosition == directions.waypoints[0].location) {
+
+    }
+  }
+
+  startTimer() {
+    // const source = timer(0, Date.now());
+    // const subscribe = source.subscribe(val => console.log(val));
+    this.running = !this.running;
+    if (this.running) {
+      this.startText = 'Stop';
+      const startTime = Date.now() - (this.counter || 0);
+      this.timerRef = setInterval(() => {
+        this.counter = Date.now() - startTime;
+        // console.log(Date.now());
+        // console.log(startTime);
+        // console.log(this.counter);
+        this.milliseconds = Math.floor(Math.floor(this.counter % 1000) / 10).toFixed(0);
+        this.minutes = Math.floor(this.counter / 60000);
+        this.seconds = Math.floor(Math.floor(this.counter % 60000) / 1000).toFixed(0);
+        if (Number(this.minutes) < 10) {
+          this.minutes = '0' + this.minutes;
+        } else {
+          this.minutes = '' + this.minutes;
+        }
+        if (Number(this.milliseconds) < 10) {
+          this.milliseconds = '0' + this.milliseconds;
+        } else {
+          this.milliseconds = '' + this.milliseconds;
+        }
+        if (Number(this.seconds) < 10) {
+          this.seconds = '0' + this.seconds;
+        } else {
+          this.seconds = '' + this.seconds;
+        }
+      });
+    } else {
+      this.startText = 'Resume';
+      clearInterval(this.timerRef);
+    }
+  }
+
+
+  lapTimeSplit() {
+    let lapTime = this.minutes + ':' + this.seconds + ':' + this.milliseconds;
+    this.laps.push(lapTime);
+  }
+
+  clearTimer() {
+    this.running = false;
+    this.startText = 'Start';
+    this.counter = undefined;
+    this.milliseconds = '00',
+      this.seconds = '00',
+      this.minutes = '00';
+    this.laps = [];
+    clearInterval(this.timerRef);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.timerRef);
   }
 }
+
+

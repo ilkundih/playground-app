@@ -1,61 +1,10 @@
 <div class="d-flex align-items-start">
-  <div
-    class="nav flex-column nav-pills me-3"
-    id="v-pills-tab"
-    role="tablist"
-    aria-orientation="vertical"
-  >
-    <a
-      class="nav-link active"
-      id="v-pills-home-tab"
-      data-bs-toggle="pill"
-      href="#v-pills-home"
-      role="tab"
-      aria-controls="v-pills-home"
-      aria-selected="true"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="icon icon-tabler icon-tabler-world"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        stroke-width="2"
-        stroke="currentColor"
-        fill="none"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-        <path d="M3.6 9l16.8 0"></path>
-        <path d="M3.6 15l16.8 0"></path>
-        <path d="M11.5 3a17 17 0 0 0 0 18"></path>
-        <path d="M12.5 3a17 17 0 0 1 0 18"></path>
-      </svg>
-      <p>MAP</p>
-    </a>
-    <a
-      class="nav-link"
-      id="v-pills-profile-tab"
-      data-bs-toggle="pill"
-      href="#v-pills-profile"
-      role="tab"
-      aria-controls="v-pills-profile"
-      aria-selected="false"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="icon icon-tabler icon-tabler-map-2"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        stroke-width="2"
-        stroke="currentColor"
-        fill="none"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
+  <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab"
+      aria-controls="v-pills-home" aria-selected="true">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-2" width="24" height="24"
+        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+        stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
         <path d="M18 6l0 .01"></path>
         <path d="M18 13l-3.5 -5a4 4 0 1 1 7 0l-3.5 5"></path>
@@ -63,24 +12,28 @@
         <path d="M9 4l0 13"></path>
         <path d="M15 15l0 5"></path>
       </svg>
+      <p>MAP</p>
+    </a>
+    <a class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile" role="tab"
+      aria-controls="v-pills-profile" aria-selected="false">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-world" width="24" height="24"
+        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+        <path d="M3.6 9l16.8 0"></path>
+        <path d="M3.6 15l16.8 0"></path>
+        <path d="M11.5 3a17 17 0 0 0 0 18"></path>
+        <path d="M12.5 3a17 17 0 0 1 0 18"></path>
+      </svg>
       <p>TABLE</p>
     </a>
   </div>
   <div class="tab-content" id="v-pills-tabContent">
-    <div
-      class="tab-pane fade show active"
-      id="v-pills-home"
-      role="tabpanel"
-      aria-labelledby="v-pills-home-tab"
-    >
+    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
       <app-map-page></app-map-page>
     </div>
-    <div
-      class="tab-pane fade"
-      id="v-pills-profile"
-      role="tabpanel"
-      aria-labelledby="v-pills-profile-tab"
-    >
+    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
       <app-home-page></app-home-page>
     </div>
   </div>
