@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import * as MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
@@ -18,7 +18,8 @@ export class MapPageComponent implements OnInit {
   seconds: any = '00';
   milliseconds: any = '00';
 
-  laps: any = [];
+  @Input() laps: any = [];
+
   counter: number;
   timerRef;
   running: boolean = false;
@@ -146,6 +147,7 @@ export class MapPageComponent implements OnInit {
   lapTimeSplit() {
     let lapTime = this.minutes + ':' + this.seconds + ':' + this.milliseconds;
     this.laps.push(lapTime);
+    this.clearTimer;
   }
 
   clearTimer() {
