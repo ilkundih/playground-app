@@ -34,11 +34,12 @@ button {
 }
 
 ul {
+
   text-align: center;
   margin: 10px auto;
   width: 150px;
   height: auto;
   position: relative;
-  display: flex;
+  display: block;
   z-index: 99999;
 }

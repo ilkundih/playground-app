@@ -2,8 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import * as MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
-import { Observable, timer } from 'rxjs';
-import { take, map } from 'rxjs/operators';
 import services from '../../assets/data/services.json';
 
 @Component({
@@ -13,22 +11,22 @@ import services from '../../assets/data/services.json';
 })
 export class MapPageComponent implements OnInit {
 
+  //lap timer variables
   clock: any;
   minutes: any = '00';
   seconds: any = '00';
   milliseconds: any = '00';
-
-  @Input() laps: any = [];
-
+  laps: any = [];
   counter: number;
   timerRef;
   running: boolean = false;
   startText = 'Start';
 
   ngOnInit(): void {
+
     (mapboxgl as typeof mapboxgl).accessToken =
       'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ';
-    const maps = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: 'map-container',
       style: 'mapbox://styles/mapbox/navigation-night-v1',
       center: [15.95, 45.8],
@@ -46,13 +44,13 @@ export class MapPageComponent implements OnInit {
       // }
     })
 
-    maps.on('style.load', () => {
-      maps.addSource('urban-areas', {
+    map.on('style.load', () => {
+      map.addSource('urban-areas', {
         type: 'geojson',
         data: 'https://docs.mapbox.com/mapbox-gl-js/assets/ne_50m_urban_areas.geojson',
       });
 
-      maps.addLayer({
+      map.addLayer({
         id: 'urban-areas-fill',
         type: 'fill',
         source: 'urban-areas',
@@ -64,7 +62,7 @@ export class MapPageComponent implements OnInit {
       });
     });
 
-    maps.addControl(directions, 'top-right');
+
 
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
@@ -84,10 +82,13 @@ export class MapPageComponent implements OnInit {
       mapboxgl: mapboxgl
     })
 
-    maps.addControl(geocoder);
-    maps.addControl(geolocate);
+    map.addControl(geocoder);
+    map.addControl(geolocate);
+    map.addControl(directions, 'top-right');
 
-    maps.on('load', function () {
+
+
+    map.on('load', function () {
       geolocate.trigger();
     })
 
@@ -99,12 +100,37 @@ export class MapPageComponent implements OnInit {
     //     ])
     //     .addTo(map);
     // }
-    console.log(geolocate.getDefaultPosition);
+    console.log(navigator.geolocation.getCurrentPosition);
 
-    if (geolocate.getDefaultPosition == directions.waypoints[0].location) {
-      this.startTimer;
+    // if (geolocate.getDefaultPosition == directions.waypoints[0].location) {
+    //   this.startTimer;
+    // }
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    function success(pos) {
+      const crd = pos.coords;
+
+      console.log("Your current position is:");
+      console.log(`Latitude : ${crd.latitude}`);
+      console.log(`Longitude: ${crd.longitude}`);
+      console.log(`More or less ${crd.accuracy} meters.`);
     }
+
+    function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
   }
+
+
+  //timer methods
 
   startTimer() {
     // const source = timer(0, Date.now());
@@ -147,7 +173,6 @@ export class MapPageComponent implements OnInit {
   lapTimeSplit() {
     let lapTime = this.minutes + ':' + this.seconds + ':' + this.milliseconds;
     this.laps.push(lapTime);
-    this.clearTimer;
   }
 
   clearTimer() {
