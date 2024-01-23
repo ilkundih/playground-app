@@ -22,6 +22,16 @@ export class MapPageComponent implements OnInit {
   running: boolean = false;
   startText = 'Start';
 
+
+  currentPosition: GeolocationCoordinates;
+
+  private options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+
+
   ngOnInit(): void {
 
     (mapboxgl as typeof mapboxgl).accessToken =
@@ -44,23 +54,23 @@ export class MapPageComponent implements OnInit {
       // }
     })
 
-    map.on('style.load', () => {
-      map.addSource('urban-areas', {
-        type: 'geojson',
-        data: 'https://docs.mapbox.com/mapbox-gl-js/assets/ne_50m_urban_areas.geojson',
-      });
+    // map.on('style.load', () => {
+    //   map.addSource('urban-areas', {
+    //     type: 'geojson',
+    //     data: 'https://docs.mapbox.com/mapbox-gl-js/assets/ne_50m_urban_areas.geojson',
+    //   });
 
-      map.addLayer({
-        id: 'urban-areas-fill',
-        type: 'fill',
-        source: 'urban-areas',
-        layout: {},
-        paint: {
-          'fill-color': '#f08',
-          'fill-opacity': 0.05,
-        },
-      });
-    });
+    //   map.addLayer({
+    //     id: 'urban-areas-fill',
+    //     type: 'fill',
+    //     source: 'urban-areas',
+    //     layout: {},
+    //     paint: {
+    //       'fill-color': '#f08',
+    //       'fill-opacity': 0.05,
+    //     },
+    //   });
+    // });
 
 
 
@@ -100,39 +110,30 @@ export class MapPageComponent implements OnInit {
     //     ])
     //     .addTo(map);
     // }
-    console.log(navigator.geolocation.getCurrentPosition);
 
-    // if (geolocate.getDefaultPosition == directions.waypoints[0].location) {
-    //   this.startTimer;
-    // }
 
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    function success(pos) {
-      const crd = pos.coords;
-
-      console.log("Your current position is:");
-      console.log(`Latitude : ${crd.latitude}`);
-      console.log(`Longitude: ${crd.longitude}`);
-      console.log(`More or less ${crd.accuracy} meters.`);
-    }
-
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
-
+    navigator.geolocation.getCurrentPosition(this.success.bind(this), this.error, this.options);
   }
 
+
+  public success(pos) {
+    const crd = pos.coords;
+    this.currentPosition = crd;
+
+    console.log("Your current position is:");
+    console.log(`Latitude : ${crd.latitude}`);
+    console.log(`Longitude: ${crd.longitude}`);
+    console.log(`More or less ${crd.accuracy} meters.`);
+  }
+
+  public error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
 
   //timer methods
 
   startTimer() {
+    console.log(this.currentPosition.latitude + ' ' + this.currentPosition.longitude);
     // const source = timer(0, Date.now());
     // const subscribe = source.subscribe(val => console.log(val));
     this.running = !this.running;
@@ -173,6 +174,8 @@ export class MapPageComponent implements OnInit {
   lapTimeSplit() {
     let lapTime = this.minutes + ':' + this.seconds + ':' + this.milliseconds;
     this.laps.push(lapTime);
+
+    console.log(lapTime);
   }
 
   clearTimer() {
