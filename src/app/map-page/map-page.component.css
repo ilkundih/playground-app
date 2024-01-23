@@ -13,33 +13,48 @@
   background-image: '/src/assets/images/circle-letter-b.png';
 }
 
+.startButton {
+  text-align: center;
+  margin: 180px 10px;
+  width: auto;
+  height: auto;
+  position: absolute;
+  display: flex;
+  z-index: 99999;
+  right: 0;
+}
+
+.lapButton {
+  text-align: center;
+  margin: 225px 10px;
+  width: auto;
+  height: auto;
+  position: absolute;
+  display: flex;
+  z-index: 99999;
+  right: 0;
+}
+
 #lap-timer {
   text-align: center;
-  margin: 10px auto;
+  margin: 270px 10px;
   width: auto;
   height: auto;
-  position: relative;
+  position: absolute;
   display: flex;
   z-index: 99999;
+  right: 0;
 }
 
-button {
-  text-align: center;
-  margin: 10px auto;
-  width: auto;
-  height: auto;
-  position: relative;
-  display: flex;
-  z-index: 99999;
-}
-
-ul {
-
-  text-align: center;
-  margin: 10px auto;
+ul,
+li {
+  margin: 320px 10px;
   width: 150px;
   height: auto;
-  position: relative;
+  position: fixed;
   display: block;
   z-index: 99999;
+  right: 0;
+  top: 10px;
+
 }

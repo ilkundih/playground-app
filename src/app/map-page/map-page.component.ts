@@ -11,6 +11,8 @@ import services from '../../assets/data/services.json';
 })
 export class MapPageComponent implements OnInit {
 
+  direction: any;
+
   //lap timer variables
   clock: any;
   minutes: any = '00';
@@ -54,26 +56,6 @@ export class MapPageComponent implements OnInit {
       // }
     })
 
-    // map.on('style.load', () => {
-    //   map.addSource('urban-areas', {
-    //     type: 'geojson',
-    //     data: 'https://docs.mapbox.com/mapbox-gl-js/assets/ne_50m_urban_areas.geojson',
-    //   });
-
-    //   map.addLayer({
-    //     id: 'urban-areas-fill',
-    //     type: 'fill',
-    //     source: 'urban-areas',
-    //     layout: {},
-    //     paint: {
-    //       'fill-color': '#f08',
-    //       'fill-opacity': 0.05,
-    //     },
-    //   });
-    // });
-
-
-
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true,
@@ -92,10 +74,9 @@ export class MapPageComponent implements OnInit {
       mapboxgl: mapboxgl
     })
 
-    map.addControl(geocoder);
-    map.addControl(geolocate);
+    //map.addControl(geocoder);
     map.addControl(directions, 'top-right');
-
+    map.addControl(geolocate);
 
 
     map.on('load', function () {
@@ -113,7 +94,12 @@ export class MapPageComponent implements OnInit {
 
 
     navigator.geolocation.getCurrentPosition(this.success.bind(this), this.error, this.options);
+
+    console.log(directions.getOrigin);
   }
+
+
+
 
 
   public success(pos) {
