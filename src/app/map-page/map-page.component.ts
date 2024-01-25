@@ -3,6 +3,7 @@ import * as mapboxgl from 'mapbox-gl';
 import * as MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import services from '../../assets/data/services.json';
+import { Laps } from '../models/laps';
 
 @Component({
   selector: 'app-map-page',
@@ -12,13 +13,15 @@ import services from '../../assets/data/services.json';
 export class MapPageComponent implements OnInit {
 
   direction: any;
+  laps: Laps[] = [];
+
 
   //lap timer variables
   clock: any;
   minutes: any = '00';
   seconds: any = '00';
   milliseconds: any = '00';
-  laps: any = [];
+  lapTime: any = '';
   counter: number;
   timerRef;
   running: boolean = false;
@@ -74,33 +77,17 @@ export class MapPageComponent implements OnInit {
       mapboxgl: mapboxgl
     })
 
-    //map.addControl(geocoder);
     map.addControl(directions, 'top-right');
     map.addControl(geolocate);
-
 
     map.on('load', function () {
       geolocate.trigger();
     })
 
-    // for (var i = 0; i < services.length; i++) {
-    //   const marker = new mapboxgl.Marker()
-    //     .setLngLat([
-    //       services[i].AKT_POS.AKT_POS_LAENGE,
-    //       services[i].AKT_POS.AKT_POS_BREITE,
-    //     ])
-    //     .addTo(map);
-    // }
-
-
     navigator.geolocation.getCurrentPosition(this.success.bind(this), this.error, this.options);
 
     console.log(directions.getOrigin);
   }
-
-
-
-
 
   public success(pos) {
     const crd = pos.coords;
@@ -118,7 +105,7 @@ export class MapPageComponent implements OnInit {
 
   //timer methods
 
-  startTimer() {
+  public startTimer() {
     console.log(this.currentPosition.latitude + ' ' + this.currentPosition.longitude);
     // const source = timer(0, Date.now());
     // const subscribe = source.subscribe(val => console.log(val));
@@ -157,14 +144,14 @@ export class MapPageComponent implements OnInit {
   }
 
 
-  lapTimeSplit() {
-    let lapTime = this.minutes + ':' + this.seconds + ':' + this.milliseconds;
-    this.laps.push(lapTime);
+  public lapTimeSplit() {
+    this.lapTime = this.minutes + ':' + this.seconds + ':' + this.milliseconds;
+    this.laps.push(this.lapTime);
 
-    console.log(lapTime);
+    console.log(this.lapTime);
   }
 
-  clearTimer() {
+  public clearTimer() {
     this.running = false;
     this.startText = 'Start';
     this.counter = undefined;
