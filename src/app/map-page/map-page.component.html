@@ -3,6 +3,6 @@
   <button class="btn btn-primary startButton" (click)="startTimer()">{{startText}}</button>
   <button class="btn btn-primary lapButton" (click)="lapTimeSplit()">Lap</button>
   <ul class="list-group" *ngFor="let lap of laps;let i = index">
-    <li class="list-group-item">Last lap: {{lap}}</li>
+    <li class="list-group-item">Last lap: {{lapTime}}</li>
   </ul>
 </div>

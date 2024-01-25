@@ -1,4 +1,4 @@
 export interface Laps {
-  // index: number;
-  lapTime: string;
+  index: number;
+  lapTime: any;
 }

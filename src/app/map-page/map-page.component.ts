@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import * as MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
-import services from '../../assets/data/services.json';
 import { Laps } from '../models/laps';
 
 @Component({
@@ -21,6 +20,7 @@ export class MapPageComponent implements OnInit {
   minutes: any = '00';
   seconds: any = '00';
   milliseconds: any = '00';
+  index: any = 0;
   lapTime: any = '';
   counter: number;
   timerRef;
@@ -29,7 +29,6 @@ export class MapPageComponent implements OnInit {
 
 
   currentPosition: GeolocationCoordinates;
-
   private options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -48,12 +47,14 @@ export class MapPageComponent implements OnInit {
       zoom: 12,
     });
 
+
+
     const directions = new MapboxDirections({
       accessToken: 'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ',
       unit: 'metric',
       profile: 'mapbox/driving',
       //bearing: true,
-      //steps: true,
+      steps: true,
       // controls: {
       //   instructions: true
       // }
@@ -79,14 +80,19 @@ export class MapPageComponent implements OnInit {
 
     map.addControl(directions, 'top-right');
     map.addControl(geolocate);
-
+    map.setPitch(40, { duration: 2000 });
     map.on('load', function () {
       geolocate.trigger();
     })
 
     navigator.geolocation.getCurrentPosition(this.success.bind(this), this.error, this.options);
 
-    console.log(directions.getOrigin);
+
+    directions.on('destination', function () {
+      // const origin = directions.getOrigin();
+      console.log(directions.getOrigin());
+      console.log(directions.getDestination());
+    });
   }
 
   public success(pos) {
@@ -106,7 +112,7 @@ export class MapPageComponent implements OnInit {
   //timer methods
 
   public startTimer() {
-    console.log(this.currentPosition.latitude + ' ' + this.currentPosition.longitude);
+    console.log('USER  ' + 'lat: ' + this.currentPosition.latitude + ' lon: ' + this.currentPosition.longitude);
     // const source = timer(0, Date.now());
     // const subscribe = source.subscribe(val => console.log(val));
     this.running = !this.running;
@@ -143,11 +149,9 @@ export class MapPageComponent implements OnInit {
     }
   }
 
-
   public lapTimeSplit() {
     this.lapTime = this.minutes + ':' + this.seconds + ':' + this.milliseconds;
     this.laps.push(this.lapTime);
-
     console.log(this.lapTime);
   }
 
@@ -164,6 +168,9 @@ export class MapPageComponent implements OnInit {
 
   ngOnDestroy() {
     clearInterval(this.timerRef);
+  }
+
+  ngOnChange() {
   }
 }
 
