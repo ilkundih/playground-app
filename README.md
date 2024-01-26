@@ -1,6 +1,22 @@
 # PlaygroundApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.8.
+This app is designed for recording "Lap times" on street sprint like tracks (from point A to point B). 
+
+## Usage
+
+To start recording laptimes, set the start point of your "track" and an end point.
+Then when you reach the start point, the lap timer will automatically start. 
+When you reach the end point, the timer will stop and store the laptime to the table view.
+
+## Table view
+
+*TO DO*
+
+On the table view, there will be:
+
+- table with your laptimes
+- a graph with your laptime progress over the selected track
+- some kind of speed statistics
 
 ## Development server
 
