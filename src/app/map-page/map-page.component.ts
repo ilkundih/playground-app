@@ -3,6 +3,9 @@ import * as mapboxgl from 'mapbox-gl';
 import * as MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import { Laps } from '../models/laps';
+import * as turf from '@turf/turf';
+import { TrackStart } from '../models/trackStart';
+import { TrackEnd } from '../models/trackEnd';
 
 @Component({
   selector: 'app-map-page',
@@ -12,9 +15,14 @@ import { Laps } from '../models/laps';
 export class MapPageComponent implements OnInit {
 
   direction: any;
+  trackStart: TrackStart[] = [];
+  trackEnd: TrackEnd[] = [];
   laps: Laps[] = [];
-
-
+  radiusInMeters: any = 10;
+  originLat: any = '';
+  originLon: any = '';
+  destinationLat: any = '';
+  destinationLon: any = '';
   //lap timer variables
   clock: any;
   minutes: any = '00';
@@ -89,11 +97,37 @@ export class MapPageComponent implements OnInit {
 
 
     directions.on('destination', function () {
-      // const origin = directions.getOrigin();
-      console.log(directions.getOrigin());
-      console.log(directions.getDestination());
+      const originLat = directions.getOrigin().geometry.coordinates[1];
+      const originLon = directions.getOrigin().geometry.coordinates[0];
+      //this.trackStart.push(originLat);
+      //this.trackStart.push(originLon);
+      const destinationLat = directions.getDestination().geometry.coordinates[1];
+      const destinationLon = directions.getDestination().geometry.coordinates[0];
+      //this.trackEnd.push(destinationLat);
+      //this.trackEnd.push(destinationLon);
+      console.log('Origin lat: ' + originLat + ' Origin long: ' + originLon);
+      console.log('Dest lat: ' + destinationLat + ' Dest long: ' + destinationLon);
+      //console.log(this.trackStart.originLat);
     });
+
+    // directions.on('destination', function makeRadius(originLat, radiusInMeters) {
+    //   var point = turf.point(originLat);
+    //   var buffered = turf.buffer(point, radiusInMeters, { units: 'meters' });
+    //   console.log(buffered);
+    //   return buffered;
+
+    // });
+    if (this.originLat == this.currentPosition.latitude && this.originLon == this.currentPosition.longitude) {
+      this.startTimer();
+    }
+    else if (this.destinationLat == this.currentPosition.latitude && this.destinationLon == this.currentPosition.longitude) {
+      this.lapTimeSplit();
+      this.clearTimer();
+    }
+
   }
+
+
 
   public success(pos) {
     const crd = pos.coords;
