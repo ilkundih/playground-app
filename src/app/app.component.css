@@ -2,21 +2,18 @@
   width: 100%;
 }
 
-.d-flex {
-  /*margin: 10px;*/
-}
-
 .nav {
   margin: 20px;
   width: 65px;
   background-color: white;
-  z-index: 9999;
-  position: fixed;
+  z-index: 999999;
+  position: absolute;
   padding: 5px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   transition: width 200ms;
   overflow: hidden;
+  display: block;
 }
 
 .nav-link>p {
