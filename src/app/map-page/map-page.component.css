@@ -5,31 +5,26 @@
   width: 100%;
 }
 
-
-.vehicleIcon {
-  display: block;
-  width: 10px;
-  height: 10px;
-  background-image: '/src/assets/images/circle-letter-b.png';
-}
-
 .startButton {
   text-align: center;
-  margin: 180px 10px;
+  margin-top: 125px;
+  margin-left: 20px;
   width: auto;
   height: auto;
-  position: absolute;
+  position: relative;
   display: flex;
   z-index: 99999;
   right: 0;
+
 }
 
 .lapButton {
   text-align: center;
-  margin: 225px 10px;
+  margin-top: 10px;
+  margin-left: 20px;
   width: auto;
   height: auto;
-  position: absolute;
+  position: relative;
   display: flex;
   z-index: 99999;
   right: 0;
@@ -37,24 +32,23 @@
 
 #lap-timer {
   text-align: center;
-  margin: 270px 10px;
+  margin-top: 10px;
+  margin-left: 20px;
   width: auto;
   height: auto;
-  position: absolute;
+  position: relative;
   display: flex;
   z-index: 99999;
   right: 0;
 }
 
-ul,
+
 li {
-  margin: 320px 10px;
+  margin-top: 10px;
+  margin-left: 20px;
   width: 150px;
   height: auto;
-  position: fixed;
+  position: absolute;
   display: block;
   z-index: 99999;
-  right: 0;
-  top: 10px;
-
 }

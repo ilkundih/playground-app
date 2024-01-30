@@ -1,9 +1,13 @@
-.card-img-top{
+.card-img-top {
     padding: 10px;
     border-radius: 20px;
 }
 
-.card{
+.card {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+table {
+    margin: 20px 120px;
 }

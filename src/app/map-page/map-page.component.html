@@ -1,7 +1,9 @@
 <div id="map-container">
-  <button id="lap-timer" class="btn btn-primary">{{minutes}}:{{seconds}}:{{milliseconds}}</button>
+
   <button class="btn btn-primary startButton" (click)="startTimer()">{{startText}}</button>
   <button class="btn btn-primary lapButton" (click)="lapTimeSplit()">Lap</button>
+  <button id="lap-timer" class="btn btn-primary"
+    (click)="clearTimer()">{{minutes}}:{{seconds}}:{{milliseconds}}</button>
   <ul class="list-group" *ngFor="let lap of laps;let i = index">
     <li class="list-group-item">Last lap: {{lapTime}}</li>
   </ul>

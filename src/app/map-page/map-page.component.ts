@@ -6,6 +6,7 @@ import { Laps } from '../models/laps';
 import * as turf from '@turf/turf';
 import { TrackStart } from '../models/trackStart';
 import { TrackEnd } from '../models/trackEnd';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-map-page',
@@ -42,6 +43,8 @@ export class MapPageComponent implements OnInit {
     timeout: 5000,
     maximumAge: 0,
   };
+
+  constructor(private dataService: DataService) { }
 
 
   ngOnInit(): void {
@@ -81,10 +84,10 @@ export class MapPageComponent implements OnInit {
       showUserLocation: true
     });
 
-    const geocoder = new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl
-    })
+    // const geocoder = new MapboxGeocoder({
+    //   accessToken: mapboxgl.accessToken,
+    //   mapboxgl: mapboxgl
+    // })
 
     map.addControl(directions, 'top-right');
     map.addControl(geolocate);
@@ -187,6 +190,7 @@ export class MapPageComponent implements OnInit {
     this.lapTime = this.minutes + ':' + this.seconds + ':' + this.milliseconds;
     this.laps.push(this.lapTime);
     console.log(this.lapTime);
+    this.dataService.sendData(this.laps);
   }
 
   public clearTimer() {
@@ -196,7 +200,7 @@ export class MapPageComponent implements OnInit {
     this.milliseconds = '00',
       this.seconds = '00',
       this.minutes = '00';
-    this.laps = [];
+    //this.laps = [];
     clearInterval(this.timerRef);
   }
 
