@@ -7,14 +7,14 @@ import * as turf from '@turf/turf';
 import { TrackStart } from '../models/trackStart';
 import { TrackEnd } from '../models/trackEnd';
 import { DataService } from '../services/data.service';
-
+//import { MapService } from '../services/map.service';
 @Component({
   selector: 'app-map-page',
   templateUrl: './map-page.component.html',
   styleUrls: ['./map-page.component.css'],
 })
 export class MapPageComponent implements OnInit {
-
+  map: any;
   direction: any;
   trackStart: TrackStart[] = [];
   trackEnd: TrackEnd[] = [];
@@ -48,6 +48,8 @@ export class MapPageComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+
 
     (mapboxgl as typeof mapboxgl).accessToken =
       'pk.eyJ1IjoiaWxhbmt1bmRpaCIsImEiOiJjbHA4Ymh6OXkyd21lMnZxa3lqdnZqMDJjIn0.enGCVPw4Xlq_IGo9qLfVuQ';
@@ -191,6 +193,7 @@ export class MapPageComponent implements OnInit {
     this.laps.push(this.lapTime);
     console.log(this.lapTime);
     this.dataService.sendData(this.laps);
+    this.clearTimer();
   }
 
   public clearTimer() {

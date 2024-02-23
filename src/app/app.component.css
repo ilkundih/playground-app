@@ -25,3 +25,13 @@
 .nav:hover {
   width: 200px;
 }
+
+.tab-pane {
+  display: flex;
+  flex-grow: grow;
+
+}
+
+.map-view-small {
+  width: 300px;
+}
